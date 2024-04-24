@@ -33,13 +33,13 @@ function moduleProject2() {
     // Creating the rows //
     let row = document.createElement("div"); // building a row
     document.querySelector("#grid").appendChild(row); // appending the built row
-    row.classList.add("row"); // adding class name to the row
+    row.classList.add("row"); // adding 'row' to classList
     // Creating the squares //
     for (let m = 0; m < 5; m++) {
-      // inner loop: 5 times per row: creates 5 squares
+      // inner loop: 5 times per row: creates 5 squares (or indices)
       let square = document.createElement("div"); // building one square
-      square.classList.add("square"); // adding class name to square
-      row.appendChild(square); // appending the built square
+      square.classList.add("square"); // adding 'square' to classList
+      row.appendChild(square); // appending the built square classList
       square.addEventListener("click", () => {
         // 👉 TASK 2 - Use a click handler to target a square 👈
         if (!square.classList.contains("targeted")) {
@@ -48,17 +48,17 @@ function moduleProject2() {
             square.classList.add("targeted");
             /**
              **We choose to include '!' (not) because why?**
-             *Because we are looking to clear the class name 'targeted'
-             * Why clear the attributed className?:
+           *Because we are looking to clear the classList 'targeted'
+             * Why clear the attributed classList?:
              * Foresight to not comeback and recode or overcode...
              * The intended result is to not have miltiple squares be 'targeted' simultaneously and have a resulting border styling from being .targeted...
              * In short:
              * We want to clear the 'targeted' square to allow a new square to become 'targeted' if/when a new square is selected...
              * Overall:
-             * When a new square is clicked, that square is given the class name 'targeted' as well as the paired CSS selector tag '.targeted' while the previous square is cleared of the both...
+             * When a new square is clicked, that square is given the classList 'targeted' as well as the paired CSS selector tag '.targeted' while the previous square is cleared of the both...
              * **NOTE:**
              * querySelector('.targeted') is specifying the CSS selector tag (denoted in js by using the '.')
-             * The second 'targeted' is the className of the square which has the CSS selector tag attributes paired to it.*/
+             * The second 'targeted' is the classList of the square which has the CSS selector tag attributes paired to it.*/
           });
         }
         console.log("Click Activation Engaged"); // displays message
@@ -103,21 +103,37 @@ function moduleProject2() {
     let isLeft = evt.key === keys.left;
     let isRight = evt.key === keys.right;
 
-    let targeted = document.querySelector('targeted') // creates a 3rd 'targeted', but is a declared variable within the keydown eventListener: allows for determining which square is targeted in relation to the key pressed.
+    let targeted = document.querySelector('.targeted') // declares a 3rd 'targeted', but is variable within the keydown eventListener; Not a class or selector: Allows for determining which square is targeted, once passsing the following conditional in relation to the key pressed.
     if (isUp) {
       console.log("Lifting Off")
+      if (targeted.parentElement.previousElementSibling) {
+        let rowIdx = Array.from(targeted.parentElement.children).indexOf(targeted)
+        targeted.classList.remove('targeted')
+        targeted.parentElement.previousElementSibling.children[rowIdx].classList.add('targeted')
+      } // squares are children, parentElement is the row, siblings pertain to the child or parent in context
+      // rowIdx : indices are w/in arrays, so Array.from is applied to transform the array like object into an array. rowIdx takes the index of the square (current) of the parent row to then apply 'targeted' to the same index on the next row moved to.
+      // classList.add : the previous rows sibiling (new row) now attains targeted classList on the child square @ rowIDx (same square index, but on a new row)
     } else if (isDown) {
       console.log("Striking Down")
+      if (targeted.parentElement.nextElementSibling) {
+        let rowIdx = Array.from(targeted.parentElement.children).indexOf(targeted)
+        targeted.classList.remove('targeted')
+        targeted.parentElement.nextElementSibling.children[rowIdx].classList.add('targeted')
+      }  
     } else if (isLeft) {
       console.log("Traveling Left")
       if (targeted.previousElementSibling) {
         targeted.classList.remove('targeted')
         targeted.previousElementSibling.classList.add('targeted')
-      } // if last square was targeted, once moving left to the next square, the className 'targeted' is removed and applied to the new square.
-      // if the targeted square is the left-most square, the square will be reselected
-      
+      } // if last square was targeted, moving to the next square will remove classList & apply to new square
+      // When the targeted square is the left-most square, the square will be reselected
     } else if (isRight) {
       console.log("Veering Right")
+      console.log(targeted.nextElementSibling)
+      if (targeted.nextElementSibling) {
+        targeted.classList.remove('targeted')
+        targeted.nextElementSibling.classList.add('targeted')
+      } // nextElementSibling has the same parameters, but specific to the opposite direction as what was previously coded above
     }
 
     // 👉 TASK 4 - Use the space bar to exterminate a mosquito 👈
