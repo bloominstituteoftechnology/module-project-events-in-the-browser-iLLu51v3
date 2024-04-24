@@ -2,9 +2,7 @@
 function moduleProject2() {
   // 👇 WORK BELOW THIS LINE 👇
   let startTime = new Date().getTime(); // Record start time
-  console.log(startTime); // display (in ms) time reference to Date.getTime creation
-
-  function getTimeElapsed() {
+  function getTimeElapsed() { // eslint-disable-line
     // To be used at end of game to get elapsed time; paragraph.info
     let currentTime = new Date().getTime();
     return currentTime - startTime;
@@ -28,42 +26,36 @@ function moduleProject2() {
   const getAllSquares = () => document.querySelectorAll(".square");
 
   // Populating the grid with rows and squares //
-  for (let n = 0; n < 5; n++) {
-    // 5 iterations
-    // Creating the rows //
+  for (let n = 0; n < 5; n++) { // 5 iterations // Creating the rows //
     let row = document.createElement("div"); // building a row
     document.querySelector("#grid").appendChild(row); // appending the built row
     row.classList.add("row"); // adding 'row' to classList
-    // Creating the squares //
-    for (let m = 0; m < 5; m++) {
-      // inner loop: 5 times per row: creates 5 squares (or indices)
+    for (let m = 0; m < 5; m++) { // inner loop: 5 times per row: creates 5 squares (or indices)
       let square = document.createElement("div"); // building one square
       square.classList.add("square"); // adding 'square' to classList
       row.appendChild(square); // appending the built square classList
       square.addEventListener("click", () => {
         // 👉 TASK 2 - Use a click handler to target a square 👈
         if (!square.classList.contains("targeted")) {
-          const squares = getAllSquares().forEach((sq) => {
+          const squares = getAllSquares().forEach((sq) => { // eslint-disable-line
             document.querySelector(".targeted").classList.remove("targeted");
             square.classList.add("targeted");
             /**
              **We choose to include '!' (not) because why?**
-           *Because we are looking to clear the classList 'targeted'
-             * Why clear the attributed classList?:
-             * Foresight to not comeback and recode or overcode...
-             * The intended result is to not have miltiple squares be 'targeted' simultaneously and have a resulting border styling from being .targeted...
+             *Because we are looking to clear the classList 'targeted'
+             * -- Why clear the attributed classList?:
+             * --- Foresight to not comeback and recode or overcode...
+             * --- The intended result is to not have miltiple squares be 'targeted' simultaneously and have a resulting border styling from being .targeted...
              * In short:
-             * We want to clear the 'targeted' square to allow a new square to become 'targeted' if/when a new square is selected...
+             * -- We want to clear the 'targeted' square to allow a new square to become 'targeted' if/when a new square is selected...
              * Overall:
-             * When a new square is clicked, that square is given the classList 'targeted' as well as the paired CSS selector tag '.targeted' while the previous square is cleared of the both...
+             * -- When a new square is clicked, that square is given the classList 'targeted' as well as the paired CSS selector tag '.targeted'. 
+             * -- The previous square is cleared of the both...
              * **NOTE:**
-             * querySelector('.targeted') is specifying the CSS selector tag (denoted in js by using the '.')
-             * The second 'targeted' is the classList of the square which has the CSS selector tag attributes paired to it.*/
+             * -- querySelector('.targeted') is specifying the CSS selector tag (denoted in js by using the '.')
+             * -- The second 'targeted' is the classList of the square which has the CSS selector tag attributes paired to it.*/
           });
         }
-        console.log("Click Activation Engaged"); // displays message
-        console.log(square.classList.contains("square")); //true if it is a square
-        console.log(square.classList.contains("targeted")); // true if it is targeted
       });
     }
   }
@@ -83,8 +75,7 @@ function moduleProject2() {
     return randomInts;
   }
   let allSquares = getAllSquares();
-  generateRandomIntegers().forEach((randomInt) => {
-    // Puts live mosquitoes in 5 random squares disignated by the random indices generated a few lines earlier
+  generateRandomIntegers().forEach((randomInt) => { // Puts live skeeter in 5 random squares disignated by the random indices generated a few lines earlier
     let mosquito = document.createElement("img");
     mosquito.src = "./mosquito.png"; // style: skeeter img
     mosquito.style.transform = `rotate(${Math.floor(
@@ -94,52 +85,55 @@ function moduleProject2() {
     allSquares[randomInt].appendChild(mosquito);
   });
 
-  document.addEventListener("keydown", (evt) => {
-    // for arrow-key and space bar action requiring event action/result
+  document.addEventListener("keydown", (evt) => { // for arrow-key and space bar action requiring event action/result
     // 👉 TASK 3 - Use the arrow keys to highlight a new square 👈
-    console.log(evt.key);
     let isUp = evt.key === keys.up; // lets 'isUp' = the up key event if the event.key was the 'up' key with the "ArrowUp" value
     let isDown = evt.key === keys.down;
     let isLeft = evt.key === keys.left;
     let isRight = evt.key === keys.right;
 
-    let targeted = document.querySelector('.targeted') // declares a 3rd 'targeted', but is variable within the keydown eventListener; Not a class or selector: Allows for determining which square is targeted, once passsing the following conditional in relation to the key pressed.
+    let targeted = document.querySelector(".targeted"); // declares a 3rd 'targeted', but is variable within the keydown eventListener; Not a class or selector: Allows for determining which square is targeted, once passsing the following conditional in relation to the key pressed.
     if (isUp) {
-      console.log("Lifting Off")
       if (targeted.parentElement.previousElementSibling) {
-        let rowIdx = Array.from(targeted.parentElement.children).indexOf(targeted)
-        targeted.classList.remove('targeted')
-        targeted.parentElement.previousElementSibling.children[rowIdx].classList.add('targeted')
-      } // squares are children, parentElement is the row, siblings pertain to the child or parent in context
+        let rowIdx = Array.from(targeted.parentElement.children).indexOf(
+          targeted
+        );
+        targeted.classList.remove("targeted");
+        targeted.parentElement.previousElementSibling.children[
+          rowIdx
+        ].classList.add("targeted");
+      } 
+      // squares are children, parentElement is the row, siblings pertain to the child or parent in context
       // rowIdx : indices are w/in arrays, so Array.from is applied to transform the array like object into an array. rowIdx takes the index of the square (current) of the parent row to then apply 'targeted' to the same index on the next row moved to.
       // classList.add : the previous rows sibiling (new row) now attains targeted classList on the child square @ rowIDx (same square index, but on a new row)
     } else if (isDown) {
-      console.log("Striking Down")
       if (targeted.parentElement.nextElementSibling) {
-        let rowIdx = Array.from(targeted.parentElement.children).indexOf(targeted)
-        targeted.classList.remove('targeted')
-        targeted.parentElement.nextElementSibling.children[rowIdx].classList.add('targeted')
-      }  
+        let rowIdx = Array.from(targeted.parentElement.children).indexOf(
+          targeted
+        );
+        targeted.classList.remove("targeted");
+        targeted.parentElement.nextElementSibling.children[
+          rowIdx
+        ].classList.add("targeted");
+      }
     } else if (isLeft) {
-      console.log("Traveling Left")
       if (targeted.previousElementSibling) {
-        targeted.classList.remove('targeted')
-        targeted.previousElementSibling.classList.add('targeted')
-      } // if last square was targeted, moving to the next square will remove classList & apply to new square
+        targeted.classList.remove("targeted");
+        targeted.previousElementSibling.classList.add("targeted");
+      } 
+      // if last square was targeted, moving to the next square will remove classList & apply to new square
       // When the targeted square is the left-most square, the square will be reselected
     } else if (isRight) {
-      console.log("Veering Right")
-      console.log(targeted.nextElementSibling)
       if (targeted.nextElementSibling) {
-        targeted.classList.remove('targeted')
-        targeted.nextElementSibling.classList.add('targeted')
-      } // nextElementSibling has the same parameters, but specific to the opposite direction as what was previously coded above
+        targeted.classList.remove("targeted");
+        targeted.nextElementSibling.classList.add("targeted");
+      } 
+      // 'nextElementSibling' has the same parameters, but specific to the opposite direction as what was previously coded above
     }
 
     // 👉 TASK 4 - Use the space bar to exterminate a mosquito 👈
 
     // 👉 TASK 5 - End the game 👈
-    console.log("Armageddon Key Activated");
   });
   // 👆 WORK WORK ABOVE THIS LINE 👆
 }
