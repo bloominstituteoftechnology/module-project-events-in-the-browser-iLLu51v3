@@ -191,11 +191,15 @@ function moduleProject2() {
       document.querySelector('p.info').textContent = 
       `You hit every skeeter in ${gameTimer} seconds!`
 
-      let playAgainButton = document.createElement('button')
-      playAgainButton.textContent = 'Play Again'
-      playAgainButton.addEventListener('click', () => {
-        location.reload() // reloads the page
-      })
+      // Play Again / Restart Button // Adds conditional check to see if button was already created; negates duplication of said button due to dual " " eventListener action
+      let playAgainButton = document.querySelector('button') // seeks for the play again button
+      if (!playAgainButton) {
+        playAgainButton = document.createElement('button') // if no button, it will create it
+        playAgainButton.textContent = 'Play Again'
+        playAgainButton.addEventListener('click', () => {
+          location.reload() // reloads the page
+        })
+      }
       document.querySelector('h2').insertAdjacentElement('afterend', playAgainButton) // insertAdjacentElement('position', object) : afterend, beforeend, afterstart,...
       playAgainButton.focus() // allows the keyboard tab button to move onto the button, highlighting it and allowing selection using the keyboard enter button
     }
